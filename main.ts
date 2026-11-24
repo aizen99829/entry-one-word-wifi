@@ -10,10 +10,11 @@ const WORD = "ghosting";
 const MIN_LENGTH = 1;
 const MAX_LENGTH = 20;
 
-// A real single word: letters only, no whitespace, digits or punctuation.
-const SINGLE_WORD_PATTERN = /^[A-Za-z]+$/;
+// A real single word: lowercase letters only — no whitespace, digits,
+// punctuation, or capitals.
+const SINGLE_WORD_PATTERN = /^[a-z]+$/;
 
-function validateWord(word: string): void {
+function validateWord(word: string): string {
   if (word.length < MIN_LENGTH || word.length > MAX_LENGTH) {
     throw new Error(
       `word must be ${MIN_LENGTH}-${MAX_LENGTH} characters, got ${word.length}`,
@@ -22,14 +23,17 @@ function validateWord(word: string): void {
   if (word.trim().length === 0) {
     throw new Error("word must not be blank");
   }
+  if (word !== word.toLowerCase()) {
+    throw new Error("word must be lowercase");
+  }
   if (!SINGLE_WORD_PATTERN.test(word)) {
     throw new Error(
       "word must be a single word of letters only, with no spaces or symbols",
     );
   }
+  return word;
 }
 
 export function main(): string {
-  validateWord(WORD);
-  return WORD;
+  return validateWord(WORD);
 }
